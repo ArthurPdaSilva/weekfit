@@ -23,16 +23,17 @@ export enum GymOptions {
   BracoCompleto = "Braço (completo)",
   Abdomen = "Abdômen",
   Lombar = "Lombar",
+  Vazio = "Vazio",
 }
 
 export type WeeklyWorkoutRow = {
   id: number;
   UserId: string;
-  [Days.Domingo]: GymOptions[];
-  [Days.Segunda]: GymOptions[];
-  [Days.Terca]: GymOptions[];
-  [Days.Quarta]: GymOptions[];
-  [Days.Quinta]: GymOptions[];
-  [Days.Sexta]: GymOptions[];
-  [Days.Sabado]: GymOptions[];
+  [Days.Domingo]: GymOptions;
+  [Days.Segunda]: GymOptions;
+  [Days.Terca]: GymOptions;
+  [Days.Quarta]: GymOptions;
+  [Days.Quinta]: GymOptions;
+  [Days.Sexta]: GymOptions;
+  [Days.Sabado]: GymOptions;
 };

@@ -1,118 +1,99 @@
+import {
+  Box,
+  Button,
+  Paper,
+  Table,
+  TableBody,
+  TableCell,
+  TableContainer,
+  TableFooter,
+  TableHead,
+  TableRow,
+  Typography,
+} from "@mui/material";
 import { useContext, useEffect, useState } from "react";
-import { Button, Table, TableRow } from "semantic-ui-react";
 import CellType from "../../@types/CellType";
 import { AuthContext } from "../../contexts/auth";
 import api from "../../services/api";
 import Cell from "../Cell";
 
-export default function TableContainer() {
+export default function TableContainerComponent() {
   const appContext = useContext(AuthContext);
-  const [rowOne, setRowOne] = useState<CellType[] | []>([]);
-  const [rowTwo, setRowTwo] = useState<CellType[] | []>([]);
-  const [rowThree, setRowThree] = useState<CellType[] | []>([]);
-  const [rowFour, setRowFour] = useState<CellType[] | []>([]);
+  const [rowOne, setRowOne] = useState<CellType[]>([]);
+  const [rowTwo, setRowTwo] = useState<CellType[]>([]);
+  const [rowThree, setRowThree] = useState<CellType[]>([]);
+  const [rowFour, setRowFour] = useState<CellType[]>([]);
 
   useEffect(() => {
     async function loadingCells() {
       api.defaults.headers.common[
         "Authorization"
       ] = `Bearer ${appContext?.token}`;
-      await api.get(`/cells/${appContext?.user?.tableId}`).then((value) => {
-        const cells = value.data as CellType[];
-        cells.sort((a, b) => (a.id as number) - (b.id as number));
-        setRowOne([
-          cells[0],
-          cells[1],
-          cells[2],
-          cells[3],
-          cells[4],
-          cells[5],
-          cells[6],
-        ]);
-        setRowTwo([
-          cells[7],
-          cells[8],
-          cells[9],
-          cells[10],
-          cells[11],
-          cells[12],
-          cells[13],
-        ]);
-        setRowThree([
-          cells[14],
-          cells[15],
-          cells[16],
-          cells[17],
-          cells[18],
-          cells[19],
-          cells[20],
-        ]);
-        setRowFour([
-          cells[21],
-          cells[22],
-          cells[23],
-          cells[24],
-          cells[25],
-          cells[26],
-          cells[27],
-        ]);
-      });
+      const response = await api.get(`/cells/${appContext?.user?.tableId}`);
+      const cells = response.data as CellType[];
+      cells.sort((a, b) => (a.id as number) - (b.id as number));
+      setRowOne(cells.slice(0, 7));
+      setRowTwo(cells.slice(7, 14));
+      setRowThree(cells.slice(14, 21));
+      setRowFour(cells.slice(21, 28));
     }
     loadingCells();
   }, []);
 
-  return (
-    <Table celled unstackable>
-      <Table.Header>
-        <Table.Row>
-          <Table.HeaderCell>Domingo</Table.HeaderCell>
-          <Table.HeaderCell>Segunda</Table.HeaderCell>
-          <Table.HeaderCell>Terca</Table.HeaderCell>
-          <Table.HeaderCell>Quarta</Table.HeaderCell>
-          <Table.HeaderCell>Quinta</Table.HeaderCell>
-          <Table.HeaderCell>Sexta</Table.HeaderCell>
-          <Table.HeaderCell>Sábado</Table.HeaderCell>
-        </Table.Row>
-      </Table.Header>
+  const days = [
+    "Domingo",
+    "Segunda",
+    "Terça",
+    "Quarta",
+    "Quinta",
+    "Sexta",
+    "Sábado",
+  ];
 
-      <Table.Body>
-        <TableRow>
-          {rowOne.map((e) => (
-            <Cell id={e.id as number} value={e.name as string} key={e.id} />
-          ))}
-        </TableRow>
-        <TableRow>
-          {rowTwo.map((e) => (
-            <Cell id={e.id as number} value={e.name as string} key={e.id} />
-          ))}
-        </TableRow>
-        <TableRow>
-          {rowThree.map((e) => (
-            <Cell id={e.id as number} value={e.name as string} key={e.id} />
-          ))}
-        </TableRow>
-        <TableRow>
-          {rowFour.map((e) => (
-            <Cell id={e.id as number} value={e.name as string} key={e.id} />
-          ))}
-        </TableRow>
-      </Table.Body>
-      <Table.Footer>
-        <Table.Row>
-          <Table.Cell colSpan="7">
-            <Button floated="right" color="red">
-              <a
-                href="https://www.instagram.com/arthurp_sillva/"
-                target="_blank"
-                rel="noreferrer"
-                style={{ color: "white" }}
-              >
-                Instagram do criador :)
-              </a>
-            </Button>
-          </Table.Cell>
-        </Table.Row>
-      </Table.Footer>
-    </Table>
+  return (
+    <Box sx={{ mt: 4 }}>
+      <TableContainer component={Paper}>
+        <Table>
+          <TableHead>
+            <TableRow>
+              {days.map((day) => (
+                <TableCell key={day} align="center">
+                  <Typography fontWeight="bold">{day}</Typography>
+                </TableCell>
+              ))}
+            </TableRow>
+          </TableHead>
+          <TableBody>
+            {[rowOne, rowTwo, rowThree, rowFour].map((row, i) => (
+              <TableRow key={i}>
+                {row.map((cell) => (
+                  <Cell
+                    id={cell.id as number}
+                    value={cell.name as string}
+                    key={cell.id}
+                  />
+                ))}
+              </TableRow>
+            ))}
+          </TableBody>
+          <TableFooter>
+            <TableRow>
+              <TableCell colSpan={7} align="right">
+                <Button
+                  variant="contained"
+                  color="error"
+                  href="https://www.instagram.com/arthurp_sillva/"
+                  target="_blank"
+                  rel="noreferrer"
+                  sx={{ color: "white" }}
+                >
+                  Instagram do criador :)
+                </Button>
+              </TableCell>
+            </TableRow>
+          </TableFooter>
+        </Table>
+      </TableContainer>
+    </Box>
   );
 }

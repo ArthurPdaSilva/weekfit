@@ -3,7 +3,6 @@ import Error from "../pages/Error";
 import Home from "../pages/Home";
 import Login from "../pages/Login";
 import Register from "../pages/Register";
-import PrivateRouter from "./privateRoutes";
 
 const Router = createBrowserRouter([
   {
@@ -17,9 +16,9 @@ const Router = createBrowserRouter([
   {
     path: "/home",
     element: (
-      <PrivateRouter>
-        <Home />
-      </PrivateRouter>
+      // <PrivateRouter>
+      <Home />
+      // </PrivateRouter>
     ),
   },
   {

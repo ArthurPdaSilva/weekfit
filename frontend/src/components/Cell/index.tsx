@@ -1,5 +1,5 @@
+import { MenuItem, Select, SelectChangeEvent, TableCell } from "@mui/material";
 import { useContext } from "react";
-import { Dropdown, TableCell } from "semantic-ui-react";
 import { AuthContext } from "../../contexts/auth";
 import api from "../../services/api";
 
@@ -10,40 +10,54 @@ type Props = {
 
 export default function Cell({ value, id }: Props) {
   const appContext = useContext(AuthContext);
+
   const gymOptions = [
-    { key: "pt", value: "Peito", text: "Peito" },
-    { key: "ct", value: "Costas", text: "Costas" },
-    { key: "ob", value: "Ombro", text: "Ombro" },
-    { key: "tpz", value: "Trapézio", text: "Trapézio" },
-    { key: "bc", value: "Bíceps", text: "Bíceps" },
-    { key: "tc", value: "Tríceps", text: "Tríceps" },
-    { key: "ay", value: "Antebraço", text: "Antebraço" },
-    { key: "ptt", value: "Posteior", text: "Posteior" },
-    { key: "gt", value: "Glúteo", text: "Glúteo" },
-    { key: "ptr", value: "Panturrilha", text: "Panturrilha" },
-    { key: "prn", value: "Perna (completa)", text: "Perna (completa)" },
-    { key: "bcc", value: "Braço (completo)", text: "Braço (completo)" },
-    { key: "abd", value: "Abdômen", text: "Abdômen" },
-    { key: "lbr", value: "Lombar", text: "Lombar" },
+    { key: "pt", value: "Peito", label: "Peito" },
+    { key: "ct", value: "Costas", label: "Costas" },
+    { key: "ob", value: "Ombro", label: "Ombro" },
+    { key: "tpz", value: "Trapézio", label: "Trapézio" },
+    { key: "bc", value: "Bíceps", label: "Bíceps" },
+    { key: "tc", value: "Tríceps", label: "Tríceps" },
+    { key: "ay", value: "Antebraço", label: "Antebraço" },
+    { key: "ptt", value: "Posteior", label: "Posteior" },
+    { key: "gt", value: "Glúteo", label: "Glúteo" },
+    { key: "ptr", value: "Panturrilha", label: "Panturrilha" },
+    { key: "prn", value: "Perna (completa)", label: "Perna (completa)" },
+    { key: "bcc", value: "Braço (completo)", label: "Braço (completo)" },
+    { key: "abd", value: "Abdômen", label: "Abdômen" },
+    { key: "lbr", value: "Lombar", label: "Lombar" },
   ];
 
-  const onUpdate = async function (value: string) {
-    console.log(value);
+  const onUpdate = async (newValue: string) => {
     api.defaults.headers.common[
       "Authorization"
     ] = `Bearer ${appContext?.token}`;
-    await api.put(`/update-table/${id}`, { name: value });
+    await api.put(`/update-table/${id}`, { name: newValue });
+  };
+
+  const handleChange = (event: SelectChangeEvent) => {
+    const newValue = event.target.value;
+    onUpdate(newValue);
   };
 
   return (
-    <TableCell key={id}>
-      <Dropdown
-        placeholder="-"
-        selection
-        options={gymOptions}
-        defaultValue={value}
-        onChange={(_, value) => onUpdate(value.value as string)}
-      />
+    <TableCell>
+      <Select
+        value={value || ""}
+        displayEmpty
+        fullWidth
+        onChange={handleChange}
+        size="small"
+      >
+        <MenuItem value="" disabled>
+          -
+        </MenuItem>
+        {gymOptions.map((opt) => (
+          <MenuItem key={opt.key} value={opt.value}>
+            {opt.label}
+          </MenuItem>
+        ))}
+      </Select>
     </TableCell>
   );
 }

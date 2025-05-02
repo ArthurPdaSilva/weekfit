@@ -1,12 +1,16 @@
+import { CssBaseline, ThemeProvider } from "@mui/material";
 import { RouterProvider } from "react-router-dom";
-import "semantic-ui-react/";
 import AuthProvider from "./contexts/auth";
 import Router from "./routes";
+import { theme } from "./theme";
 
 export default function App() {
   return (
-    <AuthProvider>
-      <RouterProvider router={Router} />
-    </AuthProvider>
+    <ThemeProvider theme={theme}>
+      <CssBaseline />
+      <AuthProvider>
+        <RouterProvider router={Router} />
+      </AuthProvider>
+    </ThemeProvider>
   );
 }

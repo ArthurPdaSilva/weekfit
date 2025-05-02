@@ -1,27 +1,40 @@
+import { Box, CircularProgress, Paper, Typography } from "@mui/material";
 import { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import { Grid, GridColumn, Icon, Message } from "semantic-ui-react";
 
 export default function Error() {
-  const redirect = useNavigate();
+  const navigate = useNavigate();
 
   useEffect(() => {
-    setTimeout(() => redirect("/home"), 5000);
-  }, []);
+    setTimeout(() => navigate("/home"), 5000);
+  }, [navigate]);
 
   return (
-    <Grid textAlign="center" style={{ height: "100vh" }} verticalAlign="middle">
-      <GridColumn style={{ maxWidth: "500px" }}>
-        <Message>
-          <Message icon>
-            <Icon name="circle notched" loading />
-            <Message.Content>
-              <Message.Header>Página não encontrada :(</Message.Header>
-              Redirecionando para a home...
-            </Message.Content>
-          </Message>
-        </Message>
-      </GridColumn>
-    </Grid>
+    <Box
+      sx={{
+        display: "flex",
+        justifyContent: "center",
+        alignItems: "center",
+        height: "100vh",
+        textAlign: "center",
+      }}
+    >
+      <Paper
+        sx={{
+          padding: 4,
+          display: "flex",
+          flexDirection: "column",
+          alignItems: "center",
+        }}
+      >
+        <CircularProgress />
+        <Typography variant="h5" sx={{ marginTop: 2 }}>
+          Página não encontrada :(
+        </Typography>
+        <Typography variant="body1" sx={{ marginTop: 1 }}>
+          Redirecionando para a home...
+        </Typography>
+      </Paper>
+    </Box>
   );
 }

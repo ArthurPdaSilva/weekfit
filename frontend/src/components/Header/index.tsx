@@ -1,21 +1,37 @@
+import { AppBar, Box, Button, Toolbar, Typography } from "@mui/material";
 import { useContext } from "react";
-import { Link } from "react-router-dom";
-import { Image, Menu } from "semantic-ui-react";
 import { AuthContext } from "../../contexts/auth";
 
 export default function HeaderContainer() {
   const appContext = useContext(AuthContext);
 
   return (
-    <Menu inverted style={{ borderRadius: 0, fontSize: "1.2rem" }}>
-      <Menu.Item as={Link} to="/home" header>
-        <Image src="assets/icon.png" style={{ marginRight: ".5em" }} />
-        Week Fit
-      </Menu.Item>
-      <Menu.Menu position="right">
-        <Menu.Item>{appContext?.user?.name}</Menu.Item>
-        <Menu.Item name="Sair" onClick={() => appContext?.logout()} />
-      </Menu.Menu>
-    </Menu>
+    <AppBar position="static">
+      <Toolbar>
+        <Box sx={{ display: "flex", alignItems: "center" }}>
+          <img
+            src="assets/icon.png"
+            alt="Week Fit"
+            style={{ marginRight: "0.5em" }}
+          />
+          <Typography variant="h6" component="div">
+            Week Fit
+          </Typography>
+        </Box>
+
+        <Box sx={{ flexGrow: 1 }} />
+
+        {appContext?.user && (
+          <>
+            <Typography variant="body1" sx={{ marginRight: 2 }}>
+              {appContext.user.name}
+            </Typography>
+            <Button color="inherit" onClick={() => appContext?.logout()}>
+              Sair
+            </Button>
+          </>
+        )}
+      </Toolbar>
+    </AppBar>
   );
 }

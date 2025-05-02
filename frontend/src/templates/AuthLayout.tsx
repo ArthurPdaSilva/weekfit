@@ -1,12 +1,9 @@
-import React, { useCallback, useContext, useState } from "react";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { Box, Button, TextField, Typography } from "@mui/material";
+import { useContext } from "react";
+import { useForm } from "react-hook-form";
 import { Link, Navigate } from "react-router-dom";
-import { Grid } from "semantic-ui-react";
-import Form from "semantic-ui-react/dist/commonjs/collections/Form";
-import GridColumn from "semantic-ui-react/dist/commonjs/collections/Grid/GridColumn";
-import Message from "semantic-ui-react/dist/commonjs/collections/Message";
-import Button from "semantic-ui-react/dist/commonjs/elements/Button";
-import Header from "semantic-ui-react/dist/commonjs/elements/Header";
-import Segment from "semantic-ui-react/dist/commonjs/elements/Segment";
+import { UserSchema, UserSchemaModel } from "../@types/UserType";
 import { AuthContext } from "../contexts/auth";
 
 type Props = {
@@ -15,73 +12,119 @@ type Props = {
 
 export default function AuthLayout(props: Props) {
   const appContext = useContext(AuthContext);
-  const [name, setName] = useState("");
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
 
-  const handleSubmit = useCallback(
-    async (e: React.FormEvent<HTMLFormElement>) => {
-      e.preventDefault();
-      if (props.isRegister)
-        await appContext?.register({ name, password, email });
-      else await appContext?.login({ email, password });
-    },
-    [name, email, password, appContext]
-  );
+  if (!appContext) return <Navigate to="/error" />;
 
-  if (appContext?.user) return <Navigate to="/home" />;
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm<UserSchemaModel>({
+    resolver: zodResolver(UserSchema),
+  });
+
+  const onSubmit = (data: UserSchemaModel) => {
+    if (props.isRegister) {
+      const { name, password, email } = data;
+      appContext.register({ name, password, email });
+    } else {
+      const { email, password } = data;
+      appContext.login({ email, password });
+    }
+  };
+
+  if (appContext.user) return <Navigate to="/home" />;
+
   return (
-    <Grid textAlign="center" style={{ height: "100vh" }} verticalAlign="middle">
-      <GridColumn style={{ maxWidth: "500px" }}>
-        <Header as="h1" color="orange" textAlign="center">
-          Week Fit
-        </Header>
-        <Form size="large" onSubmit={(e) => handleSubmit(e)}>
-          <Segment>
+    <Box
+      sx={{
+        display: "flex",
+        flexDirection: "column",
+        justifyContent: "center",
+        alignItems: "center",
+        padding: 2,
+        gap: 2,
+        height: "100vh",
+      }}
+    >
+      <Typography variant="h3" color="primary" align="center" gutterBottom>
+        Week Fit
+      </Typography>
+      <Box
+        sx={{
+          width: "100%",
+          maxWidth: 500,
+          padding: 2,
+          backgroundColor: "#fff",
+          boxShadow: "0 0 0 1px rgba(34,36,38,.22) inset,0 0 0 0 transparent",
+          borderRadius: 2,
+        }}
+      >
+        <form onSubmit={handleSubmit(onSubmit)}>
+          <Box sx={{ padding: 2 }}>
             {props.isRegister && (
-              <Form.Input
-                fluid
-                icon="user"
-                iconPosition="left"
-                placeholder="Nome de usuário"
-                value={name}
-                onChange={(e) => setName(e.target.value)}
+              <TextField
+                label="Nome de usuário"
+                variant="outlined"
+                fullWidth
+                margin="normal"
+                {...register("name")}
+                error={!!errors.name}
+                helperText={errors.name ? errors.name.message : ""}
               />
             )}
-            <Form.Input
-              fluid
-              icon="envelope"
-              iconPosition="left"
-              placeholder="E-mail"
+            <TextField
+              label="E-mail"
+              variant="outlined"
+              fullWidth
+              margin="normal"
               type="email"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
+              {...register("email")}
+              error={!!errors.email}
+              helperText={errors.email ? errors.email.message : ""}
             />
-            <Form.Input
-              fluid
-              icon="lock"
-              iconPosition="left"
-              placeholder="Senha"
+            <TextField
+              label="Senha"
+              variant="outlined"
+              fullWidth
+              margin="normal"
               type="password"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
+              {...register("password")}
+              error={!!errors.password}
+              helperText={errors.password ? errors.password.message : ""}
             />
-            <Button color="orange" fluid size="large" type="submit">
+            <Button
+              variant="contained"
+              color="primary"
+              fullWidth
+              type="submit"
+              sx={{ marginTop: 2, fontWeight: "bold" }}
+            >
               {props.isRegister ? "Cadastrar" : "Entrar"}
             </Button>
-          </Segment>
-        </Form>
-        <Message>
-          {props.isRegister
-            ? "Já possui uma conta? "
-            : "Não possui uma conta? "}
-          {props.isRegister ? (
-            <Link to="/">Entrar com uma conta</Link>
-          ) : (
-            <Link to="/register">Criar uma conta</Link>
-          )}
-        </Message>
-      </GridColumn>
-    </Grid>
+          </Box>
+        </form>
+      </Box>
+      <Box
+        sx={{
+          width: "100%",
+          maxWidth: 500,
+          display: "flex",
+          justifyContent: "center",
+          gap: 1,
+          padding: 2,
+          backgroundColor: "#F8F8F9",
+          boxShadow: "0 0 0 1px rgba(34,36,38,.22) inset,0 0 0 0 transparent",
+          borderRadius: 1,
+        }}
+      >
+        {props.isRegister ? "Já possui uma conta? " : "Não possui uma conta? "}
+        {props.isRegister ? (
+          <Link to="/">Entrar com uma conta</Link>
+        ) : (
+          <Link to="/register">Criar uma conta</Link>
+        )}
+      </Box>
+    </Box>
   );
 }

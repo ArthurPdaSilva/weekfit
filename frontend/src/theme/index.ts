@@ -5,8 +5,14 @@ export const theme = createTheme({
     primary: {
       main: "#F26202",
     },
+    text: {
+      primary: "#1B1C1D",
+    },
   },
   typography: {
+    allVariants: {
+      color: "#1B1C1D",
+    },
     fontFamily: '"Lato", "Arial", sans-serif',
     h1: {
       fontFamily: '"Lato", sans-serif',

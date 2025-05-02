@@ -22,12 +22,16 @@ export default function TableContainerComponent() {
   const [rowThree, setRowThree] = useState<CellType[]>([]);
   const [rowFour, setRowFour] = useState<CellType[]>([]);
 
+  if (appContext == null) return <></>;
+
   useEffect(() => {
     async function loadingCells() {
+      if (!appContext) return;
+
       api.defaults.headers.common[
         "Authorization"
-      ] = `Bearer ${appContext?.token}`;
-      const response = await api.get(`/cells/${appContext?.user?.tableId}`);
+      ] = `Bearer ${appContext.token}`;
+      const response = await api.get(`/cells/${appContext.user?.id}`);
       const cells = response.data as CellType[];
       cells.sort((a, b) => (a.id as number) - (b.id as number));
       setRowOne(cells.slice(0, 7));
@@ -36,7 +40,7 @@ export default function TableContainerComponent() {
       setRowFour(cells.slice(21, 28));
     }
     loadingCells();
-  }, []);
+  }, [appContext]);
 
   const days = [
     "Domingo",

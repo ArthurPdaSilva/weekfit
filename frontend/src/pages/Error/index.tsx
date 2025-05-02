@@ -6,7 +6,7 @@ export default function Error() {
   const navigate = useNavigate();
 
   useEffect(() => {
-    setTimeout(() => navigate("/home"), 5000);
+    setTimeout(() => navigate("/home"), 3000);
   }, []);
 
   return (
@@ -39,7 +39,7 @@ export default function Error() {
             width: "50dvw",
             boxShadow: "0 0 0 1px rgba(34,36,38,.22) inset,0 0 0 0 transparent",
             alignItems: "center",
-            justifyContent: "space-between",
+            justifyContent: "space-around",
           }}
         >
           <CircularProgress color="inherit" />

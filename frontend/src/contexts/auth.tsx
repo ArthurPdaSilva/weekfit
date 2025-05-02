@@ -1,12 +1,12 @@
-import { AxiosResponse } from "axios";
-import { createContext, JSX, useEffect, useState } from "react";
-import { UserSchemaModel } from "../@types/User";
+import { type JSX, createContext, useEffect, useState } from "react";
+import type { OperationResult } from "../@types/OperationResult";
+import type { UserSchemaModel, UserSession } from "../@types/User";
 import api from "../services/api";
 
 interface AppContextInterface {
   signed: boolean;
+  user: UserSession | null;
   token: string | null;
-  user: UserSchemaModel | null;
   login: ({ email, password }: UserSchemaModel) => Promise<void>;
   register: ({ name, password, email }: UserSchemaModel) => Promise<void>;
   logout: () => void;
@@ -15,76 +15,85 @@ interface AppContextInterface {
 export const AuthContext = createContext<AppContextInterface | null>(null);
 
 export default function AuthProvider({ children }: { children: JSX.Element }) {
-  const [user, setUser] = useState<UserSchemaModel | null>(null);
+  const [user, setUser] = useState<UserSession | null>(null);
   const [token, setToken] = useState<string | null>(null);
 
+  // biome-ignore lint/correctness/useExhaustiveDependencies: <explanation>
   useEffect(() => {
-    const loadingStoreData = () => {
-      const storageUser = localStorage.getItem("@Auth:user");
-      const storageToken = localStorage.getItem("@Auth:token");
+    const token = localStorage.getItem("@Auth:token");
+    if (!token) return;
+    const loadStorageData = async () => {
+      setToken(token);
+      api.defaults.headers.common.Authorization = `Bearer ${token}`;
+      const response = await api
+        .get<OperationResult<UserSession>>("/Session/GetCurrentUser")
+        .then((res) => res.data)
+        .catch((err) => {
+          console.error(err);
+          return null;
+        });
 
-      if (storageUser && storageToken) {
-        setUser(JSON.parse(storageUser));
-        setToken(JSON.parse(storageToken));
-      }
+      if (!response) return;
+      const { data } = response;
+
+      setUser(data);
     };
-    loadingStoreData();
-  }, []);
+
+    loadStorageData();
+  }, [token]);
 
   const login = async ({ email, password }: UserSchemaModel) => {
-    console.log(password);
-    const fakeUser: UserSchemaModel = {
-      id: "fake-id-12345",
-      name: "Fake User",
-      email,
-      password,
-    };
-    const fakeToken = "fake-token-12345";
+    const response = await api
+      .post<OperationResult<string>>("/Session/Login", {
+        email,
+        password,
+      })
+      .then((res) => res.data)
+      .catch((err) => {
+        console.error(err);
+        return null;
+      });
 
-    localStorage.setItem("@Auth:user", JSON.stringify(fakeUser));
-    localStorage.setItem("@Auth:token", JSON.stringify(fakeToken));
+    if (!response) return;
+    const { data, isError, message } = response;
+    window.alert(message);
+    if (isError) {
+      return;
+    }
 
-    setUser(fakeUser);
-    setToken(fakeToken);
+    setToken(data);
+    localStorage.setItem("@Auth:token", data);
   };
 
   const register = async ({ name, password, email }: UserSchemaModel) => {
-    const fakeUser: UserSchemaModel = {
-      id: "fake-id-12345",
-      name,
-      email,
-      password,
-    };
-    const fakeToken = "fake-token-12345";
+    const response = await api
+      .post<OperationResult<string>>("/Session/Register", {
+        name,
+        email,
+        password,
+      })
+      .then((res) => res.data)
+      .catch((err) => {
+        console.error(err);
+        return null;
+      });
 
-    localStorage.setItem("@Auth:user", JSON.stringify(fakeUser));
-    localStorage.setItem("@Auth:token", JSON.stringify(fakeToken));
-
-    setUser(fakeUser);
-    setToken(fakeToken);
-  };
-
-  const auth = (response: AxiosResponse<any, any>) => {
-    if (response.data.error) window.alert(response.data.error);
-    else {
-      api.defaults.headers.common[
-        "Authorization"
-      ] = `Bearer ${response.data.token}`;
-      localStorage.setItem("@Auth:token", JSON.stringify(response.data.token));
-      const user: UserSchemaModel = {
-        name: response.data.name,
-        email: response.data.email,
-        password: response.data.password,
-      };
-      localStorage.setItem("@Auth:user", JSON.stringify(user));
-      return user;
+    if (!response) return;
+    const { data, isError, message } = response;
+    window.alert(message);
+    if (isError) {
+      return;
     }
+
+    setToken(data);
+    localStorage.setItem("@Auth:token", data);
   };
 
   const logout = () => {
     localStorage.removeItem("@Auth:token");
     localStorage.removeItem("@Auth:user");
     setUser(null);
+    setToken(null);
   };
 
   return (

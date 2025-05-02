@@ -16,7 +16,7 @@ export default function Home() {
         }}
       >
         <Typography variant="h2" align="center" mb={2}>
-          Rotina do Campeão
+          Week Fit
         </Typography>
         <TableContainer />
       </Box>

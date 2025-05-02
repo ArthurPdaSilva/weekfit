@@ -28,7 +28,7 @@ export default function HeaderContainer() {
 
         {appContext?.user && (
           <>
-            <Typography variant="body1" sx={{ marginRight: 2 }}>
+            <Typography variant="body1" sx={{ marginRight: 2, color: "white" }}>
               {appContext.user.name}
             </Typography>
             <Button color="inherit" onClick={() => appContext?.logout()}>

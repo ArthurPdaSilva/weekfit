@@ -25,7 +25,7 @@ export enum GymOptions {
   Lombar = "Lombar",
 }
 
-export interface WeeklyWorkoutRow {
+export type WeeklyWorkoutRow = {
   id: number;
   UserId: string;
   [Days.Domingo]: GymOptions[];
@@ -35,4 +35,4 @@ export interface WeeklyWorkoutRow {
   [Days.Quinta]: GymOptions[];
   [Days.Sexta]: GymOptions[];
   [Days.Sabado]: GymOptions[];
-}
+};

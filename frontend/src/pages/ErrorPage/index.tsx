@@ -2,9 +2,10 @@ import { Box, CircularProgress, Typography } from "@mui/material";
 import { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 
-export default function Error() {
+export default function ErrorPage() {
   const navigate = useNavigate();
 
+  // biome-ignore lint/correctness/useExhaustiveDependencies: <explanation>
   useEffect(() => {
     setTimeout(() => navigate("/home"), 3000);
   }, []);
@@ -36,7 +37,6 @@ export default function Error() {
             padding: 2,
             display: "flex",
             borderRadius: 1,
-            width: "50dvw",
             boxShadow: "0 0 0 1px rgba(34,36,38,.22) inset,0 0 0 0 transparent",
             alignItems: "center",
             justifyContent: "space-around",
@@ -49,6 +49,7 @@ export default function Error() {
               flexDirection: "column",
               alignItems: "center",
               justifyContent: "center",
+              padding: 2,
             }}
           >
             <Typography fontWeight="bold">Página não encontrada</Typography>

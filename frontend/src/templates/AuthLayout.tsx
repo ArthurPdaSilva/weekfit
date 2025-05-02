@@ -57,7 +57,7 @@ export default function AuthLayout(props: Props) {
           padding: 2,
           backgroundColor: "#fff",
           boxShadow: "0 0 0 1px rgba(34,36,38,.22) inset,0 0 0 0 transparent",
-          borderRadius: 2,
+          borderRadius: 1,
         }}
       >
         <form onSubmit={handleSubmit(onSubmit)}>

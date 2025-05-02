@@ -1,4 +1,4 @@
-import { Box, CircularProgress, Paper, Typography } from "@mui/material";
+import { Box, CircularProgress, Typography } from "@mui/material";
 import { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 
@@ -7,7 +7,7 @@ export default function Error() {
 
   useEffect(() => {
     setTimeout(() => navigate("/home"), 5000);
-  }, [navigate]);
+  }, []);
 
   return (
     <Box
@@ -15,26 +15,47 @@ export default function Error() {
         display: "flex",
         justifyContent: "center",
         alignItems: "center",
+
         height: "100vh",
         textAlign: "center",
       }}
     >
-      <Paper
+      <Box
         sx={{
-          padding: 4,
+          padding: 2,
+          borderRadius: 1,
+          backgroundColor: "#F8F8F9",
+          gap: 2,
           display: "flex",
           flexDirection: "column",
-          alignItems: "center",
+          boxShadow: "0 0 0 1px rgba(34,36,38,.22) inset,0 0 0 0 transparent",
         }}
       >
-        <CircularProgress />
-        <Typography variant="h5" sx={{ marginTop: 2 }}>
-          Página não encontrada :(
-        </Typography>
-        <Typography variant="body1" sx={{ marginTop: 1 }}>
-          Redirecionando para a home...
-        </Typography>
-      </Paper>
+        <Box
+          sx={{
+            padding: 2,
+            display: "flex",
+            borderRadius: 1,
+            width: "50dvw",
+            boxShadow: "0 0 0 1px rgba(34,36,38,.22) inset,0 0 0 0 transparent",
+            alignItems: "center",
+            justifyContent: "space-between",
+          }}
+        >
+          <CircularProgress color="inherit" />
+          <Box
+            sx={{
+              display: "flex",
+              flexDirection: "column",
+              alignItems: "center",
+              justifyContent: "center",
+            }}
+          >
+            <Typography fontWeight="bold">Página não encontrada</Typography>
+            <Typography>Redirecionando para a home...</Typography>
+          </Box>
+        </Box>
+      </Box>
     </Box>
   );
 }

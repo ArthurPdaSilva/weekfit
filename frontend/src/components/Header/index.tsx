@@ -6,11 +6,16 @@ export default function HeaderContainer() {
   const appContext = useContext(AuthContext);
 
   return (
-    <AppBar position="static">
+    <AppBar position="static" sx={{ backgroundColor: "#1B1C1D" }}>
       <Toolbar>
-        <Box sx={{ display: "flex", alignItems: "center" }}>
+        <Box
+          sx={{
+            display: "flex",
+            alignItems: "center",
+          }}
+        >
           <img
-            src="assets/icon.png"
+            src="/logo.png"
             alt="Week Fit"
             style={{ marginRight: "0.5em" }}
           />

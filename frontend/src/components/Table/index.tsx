@@ -1,12 +1,10 @@
 import {
   Box,
-  Button,
   Paper,
   Table,
   TableBody,
   TableCell,
   TableContainer,
-  TableFooter,
   TableHead,
   TableRow,
   Typography,
@@ -76,22 +74,6 @@ export default function TableContainerComponent() {
               </TableRow>
             ))}
           </TableBody>
-          <TableFooter>
-            <TableRow>
-              <TableCell colSpan={7} align="right">
-                <Button
-                  variant="contained"
-                  color="error"
-                  href="https://www.instagram.com/arthurp_sillva/"
-                  target="_blank"
-                  rel="noreferrer"
-                  sx={{ color: "white" }}
-                >
-                  Instagram do criador :)
-                </Button>
-              </TableCell>
-            </TableRow>
-          </TableFooter>
         </Table>
       </TableContainer>
     </Box>

@@ -3,7 +3,7 @@ import { Box, Button, TextField, Typography } from "@mui/material";
 import { useContext } from "react";
 import { useForm } from "react-hook-form";
 import { Link, Navigate } from "react-router-dom";
-import { UserSchema, UserSchemaModel } from "../@types/UserType";
+import { UserSchema, UserSchemaModel } from "../@types/User";
 import { AuthContext } from "../contexts/auth";
 
 type Props = {

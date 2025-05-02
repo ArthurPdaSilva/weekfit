@@ -1,6 +1,6 @@
 import { AxiosResponse } from "axios";
 import { createContext, JSX, useEffect, useState } from "react";
-import { UserSchemaModel } from "../@types/UserType";
+import { UserSchemaModel } from "../@types/User";
 import api from "../services/api";
 
 interface AppContextInterface {

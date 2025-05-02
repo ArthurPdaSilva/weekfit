@@ -1,85 +1,55 @@
 import {
-  Box,
-  Paper,
-  Table,
-  TableBody,
-  TableCell,
-  TableContainer,
-  TableHead,
-  TableRow,
-  Typography,
-} from "@mui/material";
-import { useContext, useEffect, useState } from "react";
-import CellType from "../../@types/CellType";
-import { AuthContext } from "../../contexts/auth";
-import api from "../../services/api";
-import Cell from "../Cell";
+  MaterialReactTable,
+  useMaterialReactTable,
+  type MRT_ColumnDef,
+} from "material-react-table";
+import { useMemo, useState } from "react";
+import { Days, GymOptions, WeeklyWorkoutRow } from "../../@types/WorkoutDay";
 
-export default function TableContainerComponent() {
-  const appContext = useContext(AuthContext);
-  const [rowOne, setRowOne] = useState<CellType[]>([]);
-  const [rowTwo, setRowTwo] = useState<CellType[]>([]);
-  const [rowThree, setRowThree] = useState<CellType[]>([]);
-  const [rowFour, setRowFour] = useState<CellType[]>([]);
-
-  if (appContext == null) return <></>;
-
-  useEffect(() => {
-    async function loadingCells() {
-      if (!appContext) return;
-
-      api.defaults.headers.common[
-        "Authorization"
-      ] = `Bearer ${appContext.token}`;
-      const response = await api.get(`/cells/${appContext.user?.id}`);
-      const cells = response.data as CellType[];
-      cells.sort((a, b) => (a.id as number) - (b.id as number));
-      setRowOne(cells.slice(0, 7));
-      setRowTwo(cells.slice(7, 14));
-      setRowThree(cells.slice(14, 21));
-      setRowFour(cells.slice(21, 28));
-    }
-    loadingCells();
-  }, [appContext]);
-
-  const days = [
-    "Domingo",
-    "Segunda",
-    "Terça",
-    "Quarta",
-    "Quinta",
-    "Sexta",
-    "Sábado",
+const generateFakeRow = (id: number): WeeklyWorkoutRow => {
+  const getRandomWorkout = (): GymOptions[] => [
+    Object.values(GymOptions)[
+      Math.floor(Math.random() * Object.values(GymOptions).length)
+    ],
   ];
 
-  return (
-    <Box sx={{ mt: 4 }}>
-      <TableContainer component={Paper}>
-        <Table>
-          <TableHead>
-            <TableRow>
-              {days.map((day) => (
-                <TableCell key={day} align="center">
-                  <Typography fontWeight="bold">{day}</Typography>
-                </TableCell>
-              ))}
-            </TableRow>
-          </TableHead>
-          <TableBody>
-            {[rowOne, rowTwo, rowThree, rowFour].map((row, i) => (
-              <TableRow key={i}>
-                {row.map((cell) => (
-                  <Cell
-                    id={cell.id as number}
-                    value={cell.name as string}
-                    key={cell.id}
-                  />
-                ))}
-              </TableRow>
-            ))}
-          </TableBody>
-        </Table>
-      </TableContainer>
-    </Box>
+  return {
+    id,
+    UserId: `user${id}`,
+    [Days.Domingo]: getRandomWorkout(),
+    [Days.Segunda]: getRandomWorkout(),
+    [Days.Terca]: getRandomWorkout(),
+    [Days.Quarta]: getRandomWorkout(),
+    [Days.Quinta]: getRandomWorkout(),
+    [Days.Sexta]: getRandomWorkout(),
+    [Days.Sabado]: getRandomWorkout(),
+  };
+};
+
+export default function TableContainer() {
+  const [data, _] = useState<WeeklyWorkoutRow[]>(
+    Array.from({ length: 4 }, (_, i) => generateFakeRow(i + 1))
   );
+
+  const columns = useMemo<MRT_ColumnDef<WeeklyWorkoutRow>[]>(() => {
+    return Object.values(Days).map((day) => ({
+      accessorKey: day,
+      header: day,
+      editVariant: "select",
+      editSelectOptions: Object.values(GymOptions),
+      muiEditTextFieldProps: {
+        select: true,
+        fullWidth: true,
+      },
+    }));
+  }, []);
+
+  const table = useMaterialReactTable({
+    columns,
+    data,
+    enableEditing: true,
+    editDisplayMode: "cell",
+  });
+
+  return <MaterialReactTable table={table} />;
 }

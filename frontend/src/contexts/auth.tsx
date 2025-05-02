@@ -1,4 +1,5 @@
 import { type JSX, createContext, useEffect, useState } from "react";
+import toast from "react-hot-toast";
 import type { OperationResult } from "../@types/OperationResult";
 import type { UserSchemaModel, UserSession } from "../@types/User";
 import api from "../services/api";
@@ -51,18 +52,11 @@ export default function AuthProvider({ children }: { children: JSX.Element }) {
       .then((res) => res.data)
       .catch((err) => {
         console.error(err);
-        return null;
+        return err.response.data as OperationResult<null>;
       });
 
     if (!response) return;
-    const { data, isError, message } = response;
-    window.alert(message);
-    if (isError) {
-      return;
-    }
-
-    setToken(data);
-    localStorage.setItem("@Auth:token", data);
+    feedBack(response);
   };
 
   const register = async ({ name, password, email }: UserSchemaModel) => {
@@ -75,25 +69,31 @@ export default function AuthProvider({ children }: { children: JSX.Element }) {
       .then((res) => res.data)
       .catch((err) => {
         console.error(err);
-        return null;
+        return err.response.data as OperationResult<null>;
       });
 
     if (!response) return;
+    feedBack(response);
+  };
+
+  const feedBack = async (response: OperationResult<string | null>) => {
     const { data, isError, message } = response;
-    window.alert(message);
-    if (isError) {
+    if (isError || !data) {
+      toast.error(message);
       return;
     }
 
+    toast.success(message);
     setToken(data);
     localStorage.setItem("@Auth:token", data);
   };
 
   const logout = () => {
     localStorage.removeItem("@Auth:token");
-    localStorage.removeItem("@Auth:user");
     setUser(null);
     setToken(null);
+    api.defaults.headers.common.Authorization = undefined;
+    toast.success("Logout realizado com sucesso!");
   };
 
   return (

@@ -1,20 +1,30 @@
-import React from 'react';
-import { Grid, GridColumn, Header } from 'semantic-ui-react';
-import HeaderContainer from '../../components/Header';
-import TableContainer from '../../components/Table';
+import { Alert, Box, Typography } from "@mui/material";
+import HeaderContainer from "../../components/Header";
+import TableContainer from "../../components/Table";
 
 export default function Home() {
   return (
     <>
       <HeaderContainer />
-      <Grid style={{ height: '100vh', width: '100%' }} verticalAlign="middle">
-        <GridColumn style={{ width: '100%', overflowX: 'auto', boxSizing: 'border-box' }}>
-          <Header size="huge" textAlign="center">
-            Rotina do Campeão
-          </Header>
-          <TableContainer />
-        </GridColumn>
-      </Grid>
+      <Box
+        sx={{
+          mt: 2,
+          width: "100%",
+          display: "flex",
+          flexDirection: "column",
+          alignItems: "center",
+        }}
+      >
+        <Typography variant="h2" align="center" mb={2}>
+          Week Fit
+        </Typography>
+        <TableContainer />
+        <Alert sx={{ mt: 2 }} severity="info">
+          <Typography variant="body1">
+            Clique duas vezes em uma célula para editar
+          </Typography>
+        </Alert>
+      </Box>
     </>
   );
 }

@@ -1,0 +1,73 @@
+# Compiled object files
+*.o
+*.obj
+
+# Compiled Dynamic libraries
+*.dll
+*.so
+*.dylib
+
+# Compiled Static libraries
+*.lib
+*.a
+
+# Executables
+*.exe
+*.out
+*.app
+
+# Build directories
+bin/
+obj/
+
+# VS Code directories
+.vscode/
+.vscode-test/
+
+# Rider directories
+.idea/
+.idea_modules/
+
+# User-specific files
+*.rsuser
+*.suo
+*.user
+*.userosscache
+*.userprefs
+
+# ASP.NET Scaffolding
+ScaffoldingReadMe.txt
+
+# Visual Studio
+.vs/
+.vscode/
+_ReSharper/
+*.sln.docstates
+**/project.lock.json
+**/project.fragment.lock.json
+
+# Windows image file caches
+Thumbs.db
+ehthumbs.db
+
+# Folder config file
+Desktop.ini
+
+# Recycle Bin used on file shares
+$RECYCLE.BIN/
+
+# File system information
+*.DS_Store
+
+# Temporary files
+*.temp
+*.tmp
+
+# Packages directory
+Packages/
+
+# Any packages you have downloaded
+*.nupkg
+
+# Include auto-generated VS packages
+!*.AutoPkg

@@ -1,4 +1,4 @@
-import { Box, Typography } from "@mui/material";
+import { Alert, Box, Typography } from "@mui/material";
 import HeaderContainer from "../../components/Header";
 import TableContainer from "../../components/Table";
 
@@ -19,6 +19,11 @@ export default function Home() {
           Week Fit
         </Typography>
         <TableContainer />
+        <Alert sx={{ mt: 2 }} severity="info">
+          <Typography variant="body1">
+            Clique duas vezes em uma célula para editar
+          </Typography>
+        </Alert>
       </Box>
     </>
   );

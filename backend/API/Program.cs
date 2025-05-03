@@ -1,11 +1,14 @@
 ﻿using api.Services.TokenService;
 using api.Services.UserService;
+using api.Services.WeeklyWorkoutService;
 using API;
 using API.Mapping;
 using API.Repositories.UserRepository;
+using API.Repositories.WeeklyWorkoutRepository;
 using API.Services.SessionService;
 using API.Services.TokenService;
 using API.Services.UserService;
+using API.Services.WeeklyWorkoutService;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
@@ -88,8 +91,11 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
 
 builder.Services.AddScoped<ITokenService, TokenService>();
 builder.Services.AddScoped<IUserService, UserService>();
-builder.Services.AddScoped<IUserRepository, UserRepository>();
 builder.Services.AddScoped<ISessionService, SessionService>();
+builder.Services.AddScoped<IWeeklyWorkoutService, WeeklyWorkoutService>();
+
+builder.Services.AddScoped<IUserRepository, UserRepository>();
+builder.Services.AddScoped<IWeeklyWorkoutRepository, WeeklyWorkoutRepository>();
 
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddControllers();

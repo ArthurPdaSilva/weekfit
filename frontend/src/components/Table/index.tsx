@@ -2,45 +2,185 @@ import DeleteIcon from "@mui/icons-material/Delete";
 import { Button, IconButton } from "@mui/material";
 import {
   type MRT_ColumnDef,
+  type MRT_TableInstance,
   MaterialReactTable,
   useMaterialReactTable,
 } from "material-react-table";
-import { useMemo, useState } from "react";
+import { useContext, useEffect, useMemo, useState } from "react";
 import toast from "react-hot-toast";
+import type { OperationResult } from "../../@types/OperationResult";
 import {
-  Days,
   GymOptionLabels,
   GymOptions,
   type WeeklyWorkout,
 } from "../../@types/WorkoutDay";
+import { AuthContext } from "../../contexts/auth";
+import api from "../../services/api";
 
 export default function TableContainer() {
-  const [data, setData] = useState<WeeklyWorkout[]>([]);
-  console.log(data);
+  const appContext = useContext(AuthContext);
+  const [weeklyWorkoutRows, setWeeklyWorkoutRows] = useState<WeeklyWorkout[]>(
+    []
+  );
+
+  if (!appContext) return null;
+
+  useEffect(() => {
+    const fetchData = async () => {
+      const response = await api
+        .get<OperationResult<WeeklyWorkout[]>>("/WeeklyWorkout/Get")
+        .then((res) => res.data)
+        .catch((err) => {
+          console.error(err);
+          return null;
+        });
+
+      if (!response) return;
+      const { data, isError, message } = response;
+      if (isError || !data) {
+        toast.error(message);
+        return;
+      }
+
+      setWeeklyWorkoutRows(data);
+    };
+
+    fetchData();
+  }, []);
 
   // biome-ignore lint/correctness/useExhaustiveDependencies: <explanation>
-  const columns = useMemo<MRT_ColumnDef<WeeklyWorkout>[]>(() => {
-    return Object.entries(Days).map(([key, label]) => ({
-      accessorKey: key,
-      header: label,
-      editVariant: "select",
-      editSelectOptions: Object.values(GymOptions)
-        .filter((opt) => typeof opt === "number")
-        .map((option) => ({
-          label: GymOptionLabels[option as GymOptions],
-          value: option,
-        })),
-      muiEditTextFieldProps: {
-        select: true,
-        fullWidth: true,
+  const columns = useMemo<MRT_ColumnDef<WeeklyWorkout>[]>(
+    () => [
+      {
+        accessorFn: (row) => row.sunday,
+        header: "Domingo",
+        enableHiding: true,
+        Cell: ({ row }) => {
+          const value = row.original.sunday;
+          return <span>{GymOptionLabels[value]}</span>;
+        },
       },
-      Cell: ({ cell }) => GymOptionLabels[cell.getValue() as GymOptions],
-    }));
-  }, [data]);
+      {
+        accessorFn: (row) => row.monday,
+        header: "Segunda",
+        enableHiding: true,
+        Cell: ({ row }) => {
+          const value = row.original.monday;
+          return <span>{GymOptionLabels[value]}</span>;
+        },
+      },
+      {
+        accessorFn: (row) => row.tuesday,
+        header: "Terça",
+        enableHiding: true,
+        Cell: ({ row }) => {
+          const value = row.original.tuesday;
+          return <span>{GymOptionLabels[value]}</span>;
+        },
+      },
+      {
+        accessorFn: (row) => row.wednesday,
+        header: "Quarta",
+        enableHiding: true,
+        Cell: ({ row }) => {
+          const value = row.original.wednesday;
+          return <span>{GymOptionLabels[value]}</span>;
+        },
+      },
+      {
+        accessorFn: (row) => row.thursday,
+        header: "Quinta",
+        enableHiding: true,
+        Cell: ({ row }) => {
+          const value = row.original.thursday;
+          return <span>{GymOptionLabels[value]}</span>;
+        },
+      },
+      {
+        accessorFn: (row) => row.friday,
+        header: "Sexta",
+        enableHiding: true,
+        Cell: ({ row }) => {
+          const value = row.original.friday;
+          return <span>{GymOptionLabels[value]}</span>;
+        },
+      },
+      {
+        accessorFn: (row) => row.saturday,
+        header: "Sábado",
+        enableHiding: true,
+        Cell: ({ row }) => {
+          const value = row.original.saturday;
+          return <span>{GymOptionLabels[value]}</span>;
+        },
+      },
+    ],
+    [weeklyWorkoutRows]
+  );
+
+  const handleAddRow = async (table: MRT_TableInstance<WeeklyWorkout>) => {
+    if (!appContext.user || !appContext.user.id) return;
+
+    const newRow: WeeklyWorkout = {
+      sunday: GymOptions.Empty,
+      monday: GymOptions.Empty,
+      tuesday: GymOptions.Empty,
+      wednesday: GymOptions.Empty,
+      thursday: GymOptions.Empty,
+      friday: GymOptions.Empty,
+      saturday: GymOptions.Empty,
+      userId: appContext.user.id,
+      position: table.getPrePaginationRowModel().rows.length + 1,
+    };
+
+    const newData: WeeklyWorkout[] = [...weeklyWorkoutRows, newRow];
+
+    const response = await api
+      .post<OperationResult<null>>("/WeeklyWorkout/Post", newData)
+      .then((res) => res.data)
+      .catch((err) => {
+        console.error(err);
+        return err.response.data as OperationResult<null>;
+      });
+
+    const { isError, message } = response;
+
+    if (isError) {
+      toast.error(message);
+      return;
+    }
+
+    setWeeklyWorkoutRows((prev) => [...prev, newRow]);
+    toast.success("Linha adicionada com sucesso!");
+  };
+
+  const handleDeleteRow = async (row: WeeklyWorkout) => {
+    const newData = weeklyWorkoutRows.filter(
+      (r) => r.position !== row.position
+    );
+
+    const response = await api
+      .post<OperationResult<null>>("/WeeklyWorkout/Post", newData)
+      .then((res) => res.data)
+      .catch((err) => {
+        console.error(err);
+        return err.response.data as OperationResult<null>;
+      });
+
+    const { isError, message } = response;
+
+    if (isError) {
+      toast.error(message);
+      return;
+    }
+
+    setWeeklyWorkoutRows(newData);
+    toast.success("Linha removida com sucesso!");
+  };
 
   const table = useMaterialReactTable({
     columns,
-    data,
+    data: weeklyWorkoutRows,
     enableEditing: true,
     enableRowActions: true,
     enableGlobalFilter: false,
@@ -63,16 +203,9 @@ export default function TableContainer() {
         fontWeight: "bold",
       },
     },
-    renderRowActions(props) {
+    renderRowActions({ row }) {
       return (
-        <IconButton
-          onClick={() => {
-            setData((prev) =>
-              prev.filter((row) => row.Position !== props.row.original.Position)
-            );
-            toast.success("Linha removida com sucesso!");
-          }}
-        >
+        <IconButton onClick={() => handleDeleteRow(row.original)}>
           <DeleteIcon color="error" />
         </IconButton>
       );
@@ -81,21 +214,7 @@ export default function TableContainer() {
       <Button
         variant="contained"
         sx={{ margin: "1rem" }}
-        onClick={() => {
-          const newRow: WeeklyWorkout = {
-            Sunday: GymOptions.Empty,
-            Monday: GymOptions.Empty,
-            Tuesday: GymOptions.Empty,
-            Wednesday: GymOptions.Empty,
-            Thursday: GymOptions.Empty,
-            Friday: GymOptions.Empty,
-            Saturday: GymOptions.Empty,
-            UserId: 4,
-            Position: table.getPrePaginationRowModel().rows.length + 1,
-          };
-          setData((prev) => [...prev, newRow]);
-          toast.success("Linha adicionada com sucesso!");
-        }}
+        onClick={() => handleAddRow(table)}
       >
         Adicionar nova linha
       </Button>

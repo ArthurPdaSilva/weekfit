@@ -1,7 +1,7 @@
 import { z } from "zod";
 
 export type UserSession = {
-  id: string;
+  id: number;
   name: string;
   email: string;
 };

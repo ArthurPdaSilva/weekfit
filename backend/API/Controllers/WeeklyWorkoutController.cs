@@ -1,4 +1,7 @@
-﻿using Microsoft.AspNetCore.Authorization;
+﻿using API.DTOs.User;
+using API.DTOs.WeeklyWorkout;
+using API.Services.WeeklyWorkoutService;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Security.Claims;
 
@@ -8,38 +11,38 @@ namespace API.Controllers
     [ApiController]
     public class WeeklyWorkoutController : ControllerBase
     {
-        //private readonly IUserService _userService;
+        private readonly IWeeklyWorkoutService _weeklyWorkoutService;
 
-        public WeeklyWorkoutController()
+        public WeeklyWorkoutController(IWeeklyWorkoutService weeklyWorkoutService)
         {
-            //_userService = userService;
+            _weeklyWorkoutService = weeklyWorkoutService;
         }
 
         [Authorize]
         [HttpGet("Get")]
         public IActionResult Get()
         {
-            var id = long.Parse(HttpContext.User?.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier)?.Value);
-            //var result = _userService.GetUserById(id);
-            //if (result.IsError)
-            //{
-            //    return BadRequest(result);
-            //}
+            var userId = long.Parse(HttpContext.User?.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier)?.Value);
+            var result = _weeklyWorkoutService.Get(userId);
+            if (result.IsError)
+            {
+                return BadRequest(result);
+            }
 
-            return Ok();
+            return Ok(result);
         }
 
         [Authorize]
-        [HttpGet("Post")]
-        public IActionResult Post()
+        [HttpPost("Post")]
+        public IActionResult Post([FromBody] IList<WeeklyWorkoutRow> WeeklyWorkoutRows)
         {
-            //var result = _userService.GetUserById(id);
-            //if (result.IsError)
-            //{
-            //    return BadRequest(result);
-            //}
+            var result = _weeklyWorkoutService.Post(WeeklyWorkoutRows);
+            if (result.IsError)
+            {
+                return BadRequest(result);
+            }
 
-            return Ok();
+            return Ok(result);
         }
     }
 }

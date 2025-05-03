@@ -1,13 +1,3 @@
-export enum Days {
-  Monday = "Segunda",
-  Tuesday = "Terça",
-  Wednesday = "Quarta",
-  Thursday = "Quinta",
-  Friday = "Sexta",
-  Saturday = "Sábado",
-  Sunday = "Domingo",
-}
-
 export enum GymOptions {
   Empty = 0,
   Chest = 1,
@@ -45,13 +35,14 @@ export const GymOptionLabels: Record<GymOptions, string> = {
 };
 
 export type WeeklyWorkout = {
-  Position: number;
-  UserId: number;
-  Sunday: GymOptions;
-  Monday: GymOptions;
-  Tuesday: GymOptions;
-  Wednesday: GymOptions;
-  Thursday: GymOptions;
-  Friday: GymOptions;
-  Saturday: GymOptions;
+  id?: number;
+  position: number;
+  userId: number;
+  sunday: GymOptions;
+  monday: GymOptions;
+  tuesday: GymOptions;
+  wednesday: GymOptions;
+  thursday: GymOptions;
+  friday: GymOptions;
+  saturday: GymOptions;
 };

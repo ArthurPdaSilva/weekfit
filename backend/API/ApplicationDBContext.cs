@@ -5,6 +5,7 @@ namespace API
     public class ApplicationDbContext : DbContext
     {
         public DbSet<User> Users { get; set; }
+        public DbSet<WeeklyWorkout> WeeklyWorkouts { get; set; }
 
         public ApplicationDbContext(DbContextOptions options) : base(options) { }
 

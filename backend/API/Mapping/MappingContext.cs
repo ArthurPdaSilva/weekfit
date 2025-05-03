@@ -1,4 +1,5 @@
 ﻿using API.DTOs.User;
+using API.DTOs.WeeklyWorkout;
 using AutoMapper;
 
 namespace API.Mapping
@@ -9,6 +10,7 @@ namespace API.Mapping
         {
             CreateMap<UserRegister, User>();
             CreateMap<User, UserSession>();
+            CreateMap<WeeklyWorkout, WeeklyWorkoutRow>().ReverseMap();
         }
     }
 }

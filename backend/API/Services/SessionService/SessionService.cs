@@ -10,13 +10,11 @@ namespace API.Services.SessionService
     {
         private readonly IUserService _userService;
         private readonly ITokenService _tokenService;
-        private readonly IMapper _mapper;
 
-        public SessionService(IUserService userService, ITokenService tokenService, IMapper mapper)
+        public SessionService(IUserService userService, ITokenService tokenService)
         {
             _userService = userService;
             _tokenService = tokenService;
-            _mapper = mapper;
         }
 
         public OperationResult<string> Login(UserLogin userLogin)

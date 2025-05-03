@@ -39,7 +39,7 @@ namespace api.Services.UserService
                 return new OperationResult<UserSession>(true, null);
             }
 
-            var userSession = _mapper.Map<UserSession>(user);  
+            var userSession = _mapper.Map<UserSession>(user);
             return new OperationResult<UserSession>(false, "Usuário buscado com sucesso", userSession);
         }
     }

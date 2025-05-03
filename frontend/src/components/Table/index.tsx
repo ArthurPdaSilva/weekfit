@@ -9,45 +9,32 @@ import { useMemo, useState } from "react";
 import toast from "react-hot-toast";
 import {
   Days,
+  GymOptionLabels,
   GymOptions,
-  type WeeklyWorkoutRow,
+  type WeeklyWorkout,
 } from "../../@types/WorkoutDay";
 
-const generateFakeRow = (id: number): WeeklyWorkoutRow => {
-  const getRandomWorkout = (): GymOptions =>
-    Object.values(GymOptions)[
-      Math.floor(Math.random() * Object.values(GymOptions).length)
-    ];
-
-  return {
-    id,
-    UserId: 4,
-    [Days.Domingo]: getRandomWorkout(),
-    [Days.Segunda]: getRandomWorkout(),
-    [Days.Terca]: getRandomWorkout(),
-    [Days.Quarta]: getRandomWorkout(),
-    [Days.Quinta]: getRandomWorkout(),
-    [Days.Sexta]: getRandomWorkout(),
-    [Days.Sabado]: getRandomWorkout(),
-  };
-};
-
 export default function TableContainer() {
-  const [data, setData] = useState<WeeklyWorkoutRow[]>(
-    Array.from({ length: 4 }, (_, i) => generateFakeRow(i + 1))
-  );
+  const [data, setData] = useState<WeeklyWorkout[]>([]);
+  console.log(data);
 
   // biome-ignore lint/correctness/useExhaustiveDependencies: <explanation>
-  const columns = useMemo<MRT_ColumnDef<WeeklyWorkoutRow>[]>(() => {
-    return Object.values(Days).map((day) => ({
-      accessorKey: day,
-      header: day,
+  const columns = useMemo<MRT_ColumnDef<WeeklyWorkout>[]>(() => {
+    return Object.entries(Days).map(([key, label]) => ({
+      accessorKey: key,
+      header: label,
       editVariant: "select",
-      editSelectOptions: Object.values(GymOptions),
+      editSelectOptions: Object.values(GymOptions)
+        .filter((opt) => typeof opt === "number")
+        .map((option) => ({
+          label: GymOptionLabels[option as GymOptions],
+          value: option,
+        })),
       muiEditTextFieldProps: {
         select: true,
         fullWidth: true,
       },
+      Cell: ({ cell }) => GymOptionLabels[cell.getValue() as GymOptions],
     }));
   }, [data]);
 
@@ -81,7 +68,7 @@ export default function TableContainer() {
         <IconButton
           onClick={() => {
             setData((prev) =>
-              prev.filter((row) => row.id !== props.row.original.id)
+              prev.filter((row) => row.Position !== props.row.original.Position)
             );
             toast.success("Linha removida com sucesso!");
           }}
@@ -95,18 +82,19 @@ export default function TableContainer() {
         variant="contained"
         sx={{ margin: "1rem" }}
         onClick={() => {
-          const newRow: WeeklyWorkoutRow = {
-            Domingo: GymOptions.Vazio,
-            Segunda: GymOptions.Vazio,
-            Terça: GymOptions.Vazio,
-            Quarta: GymOptions.Vazio,
-            Quinta: GymOptions.Vazio,
-            Sexta: GymOptions.Vazio,
-            Sábado: GymOptions.Vazio,
+          const newRow: WeeklyWorkout = {
+            Sunday: GymOptions.Empty,
+            Monday: GymOptions.Empty,
+            Tuesday: GymOptions.Empty,
+            Wednesday: GymOptions.Empty,
+            Thursday: GymOptions.Empty,
+            Friday: GymOptions.Empty,
+            Saturday: GymOptions.Empty,
             UserId: 4,
-            id: table.getPrePaginationRowModel().rows.length + 1,
+            Position: table.getPrePaginationRowModel().rows.length + 1,
           };
           setData((prev) => [...prev, newRow]);
+          toast.success("Linha adicionada com sucesso!");
         }}
       >
         Adicionar nova linha

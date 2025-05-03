@@ -1,39 +1,57 @@
 export enum Days {
-  Segunda = "Segunda",
-  Terca = "Terça",
-  Quarta = "Quarta",
-  Quinta = "Quinta",
-  Sexta = "Sexta",
-  Sabado = "Sábado",
-  Domingo = "Domingo",
+  Monday = "Segunda",
+  Tuesday = "Terça",
+  Wednesday = "Quarta",
+  Thursday = "Quinta",
+  Friday = "Sexta",
+  Saturday = "Sábado",
+  Sunday = "Domingo",
 }
 
 export enum GymOptions {
-  Peito = "Peito",
-  Costas = "Costas",
-  Ombro = "Ombro",
-  Trapezio = "Trapézio",
-  Biceps = "Bíceps",
-  Triceps = "Tríceps",
-  Antebraco = "Antebraço",
-  Posterior = "Posteior",
-  Gluteo = "Glúteo",
-  Panturrilha = "Panturrilha",
-  PernaCompleta = "Perna (completa)",
-  BracoCompleto = "Braço (completo)",
-  Abdomen = "Abdômen",
-  Lombar = "Lombar",
-  Vazio = "Vazio",
+  Empty = 0,
+  Chest = 1,
+  Back = 2,
+  Shoulder = 3,
+  Trapezius = 4,
+  Biceps = 5,
+  Triceps = 6,
+  Forearm = 7,
+  Posterior = 8,
+  Gluteus = 9,
+  Calf = 10,
+  FullLeg = 11,
+  FullArm = 12,
+  Abdomen = 13,
+  Lumbar = 14,
 }
 
-export type WeeklyWorkoutRow = {
-  id: number;
-  UserId: string;
-  [Days.Domingo]: GymOptions;
-  [Days.Segunda]: GymOptions;
-  [Days.Terca]: GymOptions;
-  [Days.Quarta]: GymOptions;
-  [Days.Quinta]: GymOptions;
-  [Days.Sexta]: GymOptions;
-  [Days.Sabado]: GymOptions;
+export const GymOptionLabels: Record<GymOptions, string> = {
+  [GymOptions.Empty]: "Vazio",
+  [GymOptions.Chest]: "Peito",
+  [GymOptions.Back]: "Costas",
+  [GymOptions.Shoulder]: "Ombro",
+  [GymOptions.Trapezius]: "Trapézio",
+  [GymOptions.Biceps]: "Bíceps",
+  [GymOptions.Triceps]: "Tríceps",
+  [GymOptions.Forearm]: "Antebraço",
+  [GymOptions.Posterior]: "Posterior",
+  [GymOptions.Gluteus]: "Glúteo",
+  [GymOptions.Calf]: "Panturrilha",
+  [GymOptions.FullLeg]: "Perna (completa)",
+  [GymOptions.FullArm]: "Braço (completo)",
+  [GymOptions.Abdomen]: "Abdômen",
+  [GymOptions.Lumbar]: "Lombar",
+};
+
+export type WeeklyWorkout = {
+  Position: number;
+  UserId: number;
+  Sunday: GymOptions;
+  Monday: GymOptions;
+  Tuesday: GymOptions;
+  Wednesday: GymOptions;
+  Thursday: GymOptions;
+  Friday: GymOptions;
+  Saturday: GymOptions;
 };

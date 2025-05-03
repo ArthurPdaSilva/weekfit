@@ -1,5 +1,4 @@
-﻿using API.Models;
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.EntityFrameworkCore;
 
 namespace API
 {
@@ -13,7 +12,11 @@ namespace API
         {
             base.OnModelCreating(modelBuilder);
 
+            modelBuilder.Entity<WeeklyWorkout>()
+                .HasOne(p => p.User)
+                .WithMany(u => u.WeeklyWorkouts)
+                .HasForeignKey(p => p.UserId)
+                .OnDelete(DeleteBehavior.Cascade);
         }
-
     }
 }

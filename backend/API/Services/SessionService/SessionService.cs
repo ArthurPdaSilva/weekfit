@@ -76,6 +76,6 @@ namespace API.Services.SessionService
 
             return new OperationResult<UserSession>(false, "Usuário encontrado com sucesso", user.Data);
         }
-       
+
     }
 }

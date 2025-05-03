@@ -1,6 +1,4 @@
-﻿using API.Models;
-
-namespace API.DTOs.User
+﻿namespace API.DTOs.User
 {
     public class UserSession
     {

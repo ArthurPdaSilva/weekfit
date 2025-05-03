@@ -1,7 +1,10 @@
 import DeleteIcon from "@mui/icons-material/Delete";
-import { Button, IconButton } from "@mui/material";
+import { Box, Button, IconButton, useMediaQuery } from "@mui/material";
 import {
   type MRT_ColumnDef,
+  MRT_ShowHideColumnsButton,
+  MRT_ToggleDensePaddingButton,
+  MRT_ToggleFiltersButton,
   MaterialReactTable,
   useMaterialReactTable,
 } from "material-react-table";
@@ -17,8 +20,11 @@ import {
 } from "../@types/WorkoutDay";
 import { AuthContext } from "../contexts/auth";
 import api from "../services/api";
+import { ExcelButton } from "./ExcelButton";
 
 export const Table = () => {
+  const isMobile = useMediaQuery("(max-width: 768px)");
+
   const appContext = useContext(AuthContext);
   const [weeklyWorkoutRows, setWeeklyWorkoutRows] = useState<WeeklyWorkout[]>(
     []
@@ -181,7 +187,7 @@ export const Table = () => {
     enableGlobalFilter: false,
     enableFilters: false,
     enableSorting: false,
-    editDisplayMode: "cell",
+    editDisplayMode: isMobile ? "modal" : "cell",
     localization: {
       actions: "Ações",
       noRecordsToDisplay: "Nenhum registro encontrado",
@@ -205,6 +211,19 @@ export const Table = () => {
         </IconButton>
       );
     },
+    renderToolbarInternalActions: ({ table }) => (
+      <Box
+        sx={{
+          display: "flex",
+          justifyContent: "space-between",
+        }}
+      >
+        <MRT_ToggleFiltersButton table={table} />
+        <MRT_ShowHideColumnsButton table={table} />
+        <MRT_ToggleDensePaddingButton table={table} />
+        <ExcelButton data={weeklyWorkoutRows} />
+      </Box>
+    ),
     renderTopToolbarCustomActions: () => (
       <Button
         variant="contained"

@@ -16,6 +16,7 @@
     "@mui/icons-material": "^7.0.2",
     "@mui/material": "^7.0.2",
     "axios": "^1.9.0",
+    "export-to-csv": "^1.4.0",
     "material-react-table": "^3.2.1",
     "react": "^19.0.0",
     "react-dom": "^19.0.0",

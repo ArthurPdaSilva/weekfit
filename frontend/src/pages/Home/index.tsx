@@ -13,12 +13,16 @@ export default function Home() {
           display: "flex",
           flexDirection: "column",
           alignItems: "center",
+          justifyContent: "center",
+          padding: 2,
         }}
       >
         <Typography variant="h2" align="center" mb={2}>
           Week Fit
         </Typography>
-        <Table />
+        <Box sx={{ width: "100%", maxWidth: 1500 }}>
+          <Table />
+        </Box>
         <Alert sx={{ mt: 2 }} severity="info">
           <Typography variant="body1">
             Clique duas vezes em uma célula para editar

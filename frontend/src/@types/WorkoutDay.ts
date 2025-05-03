@@ -16,6 +16,18 @@ export enum GymOptions {
   Lumbar = 14,
 }
 
+export const dayLabels: Record<keyof WeeklyWorkout, string> = {
+  sunday: "Domingo",
+  monday: "Segunda",
+  tuesday: "Terça",
+  wednesday: "Quarta",
+  thursday: "Quinta",
+  friday: "Sexta",
+  saturday: "Sábado",
+  id: "ID",
+  userId: "ID do Usuário",
+};
+
 export const GymOptionLabels: Record<GymOptions, string> = {
   [GymOptions.Empty]: "Vazio",
   [GymOptions.Chest]: "Peito",
@@ -36,7 +48,6 @@ export const GymOptionLabels: Record<GymOptions, string> = {
 
 export type WeeklyWorkout = {
   id?: number;
-  position: number;
   userId: number;
   sunday: GymOptions;
   monday: GymOptions;
@@ -46,3 +57,10 @@ export type WeeklyWorkout = {
   friday: GymOptions;
   saturday: GymOptions;
 };
+
+export const gymOptions = Object.values(GymOptions)
+  .filter((opt) => typeof opt === "number")
+  .map((option) => ({
+    label: GymOptionLabels[option as GymOptions],
+    value: option,
+  }));

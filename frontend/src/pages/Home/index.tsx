@@ -1,11 +1,11 @@
 import { Alert, Box, Typography } from "@mui/material";
-import HeaderContainer from "../../components/Header";
-import TableContainer from "../../components/Table";
+import { Header } from "../../components/Header";
+import { Table } from "../../components/Table";
 
 export default function Home() {
   return (
     <>
-      <HeaderContainer />
+      <Header />
       <Box
         sx={{
           mt: 2,
@@ -18,7 +18,7 @@ export default function Home() {
         <Typography variant="h2" align="center" mb={2}>
           Week Fit
         </Typography>
-        <TableContainer />
+        <Table />
         <Alert sx={{ mt: 2 }} severity="info">
           <Typography variant="body1">
             Clique duas vezes em uma célula para editar

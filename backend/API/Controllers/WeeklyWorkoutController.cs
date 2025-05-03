@@ -34,9 +34,35 @@ namespace API.Controllers
 
         [Authorize]
         [HttpPost("Post")]
-        public IActionResult Post([FromBody] IList<WeeklyWorkoutRow> WeeklyWorkoutRows)
+        public IActionResult Post(WeeklyWorkoutRow weeklyWorkoutRow)
         {
-            var result = _weeklyWorkoutService.Post(WeeklyWorkoutRows);
+            var result = _weeklyWorkoutService.Post(weeklyWorkoutRow);
+            if (result.IsError)
+            {
+                return BadRequest(result);
+            }
+
+            return Ok(result);
+        }
+
+        [Authorize]
+        [HttpPut("Put")]
+        public IActionResult Put([FromBody] WeeklyWorkoutRow weeklyWorkoutRow)
+        {
+            var result = _weeklyWorkoutService.Put(weeklyWorkoutRow);
+            if (result.IsError)
+            {
+                return BadRequest(result);
+            }
+
+            return Ok(result);
+        }
+
+        [Authorize]
+        [HttpDelete("Delete")]
+        public IActionResult Delete(long rowId)
+        {
+            var result = _weeklyWorkoutService.Delete(rowId);
             if (result.IsError)
             {
                 return BadRequest(result);

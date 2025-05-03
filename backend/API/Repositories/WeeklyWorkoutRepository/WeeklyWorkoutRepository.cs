@@ -1,7 +1,4 @@
-﻿
-using API.Repositories.WeeklyWorkoutRepository;
-
-namespace API.Repositories.WeeklyWorkoutRepository
+﻿namespace API.Repositories.WeeklyWorkoutRepository
 {
     public class WeeklyWorkoutRepository : IWeeklyWorkoutRepository
     {
@@ -12,20 +9,30 @@ namespace API.Repositories.WeeklyWorkoutRepository
             _context = context;
         }
 
-        public void Update(IList<WeeklyWorkout> weeklyWorkouts)
+        public long Create(WeeklyWorkout weeklyWorkout)
         {
-            var existingWeeklyWorkouts = _context.WeeklyWorkouts
-                .Where(w => w.UserId == weeklyWorkouts[0].UserId)
-                .ToList();
+            _context.WeeklyWorkouts.Add(weeklyWorkout);
+            _context.SaveChanges();
+            return weeklyWorkout.Id;
+        }
 
-            if (existingWeeklyWorkouts.Count > 0)
+        public void Delete(long id)
+        {
+            var weeklyWorkout = _context.WeeklyWorkouts.Find(id);
+            if (weeklyWorkout != null)
             {
-                _context.WeeklyWorkouts.RemoveRange(existingWeeklyWorkouts);
-
+                _context.WeeklyWorkouts.Remove(weeklyWorkout);
+                _context.SaveChanges();
             }
-            _context.WeeklyWorkouts.AddRange(weeklyWorkouts);
+        }
+
+        public void Update(WeeklyWorkout weeklyWorkout)
+        {
+            _context.WeeklyWorkouts.Update(weeklyWorkout);
             _context.SaveChanges();
         }
+
+
 
         public IList<WeeklyWorkout> Get(long userId)
         {

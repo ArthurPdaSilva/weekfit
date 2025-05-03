@@ -1,8 +1,8 @@
 import { AppBar, Box, Button, Toolbar, Typography } from "@mui/material";
 import { useContext } from "react";
-import { AuthContext } from "../../contexts/auth";
+import { AuthContext } from "../contexts/auth";
 
-export default function HeaderContainer() {
+export const Header = () => {
   const appContext = useContext(AuthContext);
 
   return (
@@ -39,4 +39,4 @@ export default function HeaderContainer() {
       </Toolbar>
     </AppBar>
   );
-}
+};

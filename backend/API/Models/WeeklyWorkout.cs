@@ -3,7 +3,6 @@
 public class WeeklyWorkout
 {
     public long Id { get; set; }
-    public int Position { get; set; } 
     public GymOptions Sunday { get; set; }
     public GymOptions Monday { get; set; }
     public GymOptions Tuesday { get; set; }

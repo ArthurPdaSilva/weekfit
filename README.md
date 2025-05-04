@@ -11,7 +11,7 @@ Esse projeto foi desenvolvido com as seguintes tecnologias: <br/>
 - React Hook Form
 - Material React Table
 
-⚙️ Instalação do projeto <br id="-instalacao-do-projeto">
+## ⚙️ Instalação do projeto <br id="-instalacao-do-projeto">
 Pré-requisitos
 .NET 7+
 
@@ -22,7 +22,7 @@ Pré-requisitos
 # Acesse a pasta do backend
 cd backend
 
-# Configure a connection string no appsettings.json
+## Configure a connection string no appsettings.json
 
 # Clone o repositório
 git clone https://github.com/seu-usuario/weekfit.git
@@ -34,11 +34,8 @@ cd weekfit/frontend
 pnpm i
 
 # Inicie o servidor
-npm run dev
+pnpm run dev
 Banco de dados com Docker (opcional)
-bash
-Copiar
-Editar
 docker-compose up -d
 
 # 💻 Sobre o Projeto <br id="-sobre-o-projeto">

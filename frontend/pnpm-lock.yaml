@@ -23,6 +23,9 @@ dependencies:
   axios:
     specifier: ^1.9.0
     version: 1.9.0
+  export-to-csv:
+    specifier: ^1.4.0
+    version: 1.4.0
   material-react-table:
     specifier: ^3.2.1
     version: 3.2.1(@emotion/react@11.14.0)(@emotion/styled@11.14.0)(@mui/icons-material@7.0.2)(@mui/material@7.0.2)(@mui/x-date-pickers@8.2.0)(react-dom@19.1.0)(react@19.1.0)
@@ -1896,6 +1899,11 @@ packages:
     resolution: {integrity: sha512-kVscqXk4OCp68SZ0dkgEKVi6/8ij300KBWTJq32P/dYeWTSwK41WyTxalN1eRmA5Z9UU/LX9D7FWSmV9SAYx6g==}
     engines: {node: '>=0.10.0'}
     dev: true
+
+  /export-to-csv@1.4.0:
+    resolution: {integrity: sha512-6CX17Cu+rC2Fi2CyZ4CkgVG3hLl6BFsdAxfXiZkmDFIDY4mRx2y2spdeH6dqPHI9rP+AsHEfGeKz84Uuw7+Pmg==}
+    engines: {node: ^v12.20.0 || >=v14.13.0}
+    dev: false
 
   /fast-deep-equal@3.1.3:
     resolution: {integrity: sha512-f3qQ9oQy9j2AhBe/H9VC91wLmKBCCU/gDOnKNAYG5hswO7BLKj09Hc5HYNz9cGI++xlpDCIgDaitVs03ATR84Q==}

@@ -29,15 +29,38 @@ namespace api.Services.WeeklyWorkoutService
             return new OperationResult<IList<WeeklyWorkoutRow>>(false, "Lista encontrada com sucesso", weeklyWorkoutRows);
         }
 
-        public OperationResult<string> Post(IList<WeeklyWorkoutRow> WeeklyWorkoutRows)
+        public OperationResult<long> Post(WeeklyWorkoutRow WeeklyWorkoutRow)
         {
-            var weeklyWorkouts = _mapper.Map<IList<WeeklyWorkout>>(WeeklyWorkoutRows);
-            if (weeklyWorkouts is null)
+            var weeklyWorkout = _mapper.Map<WeeklyWorkout>(WeeklyWorkoutRow);
+            if (weeklyWorkout is null)
             {
-                return new OperationResult<string>(true, "Lista não encontrada");
+                return new OperationResult<long>(true, "Falha ao converter linha");
             }
-            _weeklyWorkoutRepository.Update(weeklyWorkouts);
-            return new OperationResult<string>(false, "Lista criada com sucesso");
+            var rowId = _weeklyWorkoutRepository.Create(weeklyWorkout);
+            return new OperationResult<long>(false, "Linha adicionada com sucesso", rowId);
         }
+
+        public OperationResult<string> Put(WeeklyWorkoutRow weeklyWorkoutRow)
+        {
+            var weeklyWorkout = _mapper.Map<WeeklyWorkout>(weeklyWorkoutRow);
+            if (weeklyWorkout is null)
+            {
+                return new OperationResult<string>(true, "Falha ao converter linha");
+            }
+            _weeklyWorkoutRepository.Update(weeklyWorkout);
+            return new OperationResult<string>(false, "Linha atualizada com sucesso");
+        }
+
+        public OperationResult<string> Delete(long userId)
+        {
+            var weeklyWorkout = _weeklyWorkoutRepository.Get(userId);
+            if (weeklyWorkout is null)
+            {
+                return new OperationResult<string>(true, "Linha não encontrada");
+            }
+            _weeklyWorkoutRepository.Delete(userId);
+            return new OperationResult<string>(false, "Linha deletada com sucesso");
+        }
+
     }
 }

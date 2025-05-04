@@ -1,10 +1,9 @@
 <h1 align="center"> WeekFit </h1> <p align="center"> Gerencie seus treinos da semana de forma simples e eficiente 🏋️‍♂️<br/> </p> <p align="center"> <a href="#-tecnologias">Tecnologias</a>&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp; <a href="#-instalacao-do-projeto">Instalação</a>&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp; <a href="#-sobre-o-projeto">Sobre</a> </p>
 🚀 Tecnologias <br id="-tecnologias">
-Esse projeto foi desenvolvido com as seguintes tecnologias:
+Esse projeto foi desenvolvido com as seguintes tecnologias: <br/>
 - Typescript
 - React
 - C# (.NET)
-- Tanstack Router
 - MUI (Material UI)
 - PostgreSQL
 - Docker
